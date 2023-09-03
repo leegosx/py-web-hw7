@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 5000
 
 # Run our application inside the container
-ENTRYPOINT ["python", "src/main.py"]
+ENTRYPOINT ["python", "main.py"]
