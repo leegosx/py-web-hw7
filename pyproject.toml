@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "py-web sql-alchemy (hw-7)"
+name = "py_web_sql_alchemy_hw7"
 version = "0.1"
 description = "This project aims to generate a SQLite database with fake data and execute SQL queries on it. The project consists of multiple Python files and SQL query files to handle the database creation, data generation, and query execution."
 authors = ["Dmytro Klymenko <klimenko.dmitris@gmail.com>"]
@@ -14,6 +14,7 @@ alembic = "^1.11.3"
 sqlalchemy = "^2.0.20"
 psycopg2 = "^2.9.7"
 faker = "^19.3.1"
+configparser = "^6.0.0"
 
 
 [build-system]
