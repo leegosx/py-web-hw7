@@ -1,15 +1,9 @@
 import datetime
 
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, Mapped
-import psycopg2
+from sqlalchemy.orm import relationship, Mapped
 
-DATABASE_URL = f"postgresql+psycopg2://postgres:9781@localhost:5432/university"
-
-engine = create_engine(DATABASE_URL, echo=False)
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
 
 Base = declarative_base()
 
@@ -57,6 +51,3 @@ class Grade(Base):
     subject_id = Column(Integer, ForeignKey('subjects.id'))
     subject = relationship(Subject, backref='grades')
     
-    
-Base.metadata.bind = engine
-Base.metadata.create_all(engine)

@@ -1,1 +1,0 @@
-SELECT ROUND(AVG(grade)) FROM Grades;
