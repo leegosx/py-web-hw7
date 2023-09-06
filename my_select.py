@@ -1,5 +1,5 @@
 from database.db_config import session, create_engine
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from prettytable import PrettyTable
 from database.uni_models import Student, Grade, Subject, Group, Teacher, subjects_to_teachers
 
@@ -145,14 +145,43 @@ def select_10(student_first_name, student_last_name, teacher_first_name, teacher
             .all()
 )
     return create_prettytable("Subject", data=student_teacher_courses)
+
+def select_11(student_first_name, student_last_name, teacher_first_name, teacher_last_name):
+    avg_teacher_student_score = (
+        session.query(func.avg(Grade.grade).label("avg_score"))
+        .join(Student, Grade.student_id == Student.id)
+        .join(Subject, Grade.subject_id == Subject.id)
+        .join(subjects_to_teachers, subjects_to_teachers.c.subject_id == Subject.id)
+        .filter(Student.first_name == student_first_name, Student.last_name == student_last_name)
+        .filter(Teacher.first_name == teacher_first_name, Teacher.last_name == teacher_last_name)
+        .scalar()
+    )
+    
+    return f"|||Average Score Given by {teacher_first_name} {teacher_last_name} to {student_first_name} {student_last_name}: {avg_teacher_student_score:.2f}|||"
+
+def select_12(group_name, subject_name):
+    last_lesson_grades = (
+        session.query(Student.first_name, Student.last_name, Grade.grade)
+        .join(Group, Student.group_id == Group.id)
+        .join(Grade, Student.id == Grade.student_id)
+        .join(Subject, Grade.subject_id == Subject.id)
+        .filter(Group.name == group_name)
+        .filter(Subject.name == subject_name)
+        .order_by(desc(Grade.date))
+        .first()
+    )
+    
+    return create_prettytable("First name", "Last name", "Grade", data=[last_lesson_grades])
 if __name__ == "__main__":
-    # print(select_1())
-    # print(select_2('Sociology'))
-    # print(select_3('German'))
-    # print(select_4())
-    # print(select_5('Laura', 'Simpson'))
-    # print(select_6('107B'))
-    # print(select_7('Gender Studies', '120B'))
-    # print(select_8("Shelly", "Burke"))
-    # print(select_9('Kristin', 'Good'))
-    # print(select_10('Holly', 'Alexander', 'Laura', 'Simpson'))
+    print(select_1())
+    print(select_2('Sociology'))
+    print(select_3('German'))
+    print(select_4())
+    print(select_5('Laura', 'Simpson'))
+    print(select_6('107B'))
+    print(select_7('Gender Studies', '120B'))
+    print(select_8("Shelly", "Burke"))
+    print(select_9('Kristin', 'Good'))
+    print(select_10('Holly', 'Alexander', 'Laura', 'Simpson'))
+    print(select_11('Holly', 'Alexander', 'Laura', 'Simpson'))
+    print(select_12('107B', "German"))
